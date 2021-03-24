@@ -17,5 +17,5 @@ class WebScraper:
 
 url = 'https://www.hockey-reference.com/players/m/mcdavco01.html'
 ws = WebScraper(url)
-value = ws.get_player_stats_for_year('points', '2020')
+value = ws.get_player_stats_for_year('points', '2021')
 print(value)
