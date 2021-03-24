@@ -11,5 +11,5 @@ USAGE:
 python3 main.py <year> <skaterFile> <goalieFile>
 ```
 - `year`: Last hockey year of the season to get for (e.g. 2020-21 season would be 2021)
-- `skaterFile`: List of skaters, split by endlines, to get points for
-- `goalieFile`: List of goalies, split by endlines, to get wins and shutouts for"
+- `skaterFile`: A file containing a list of skaters to get points for, split by endlines
+- `goalieFile`: A file containing a list of goalies to get wins and shutouts for, split by endlines
