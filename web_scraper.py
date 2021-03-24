@@ -17,6 +17,7 @@ class WebScraper:
             for col in most_recent_stats:
                 if stat in str(col):
                     statValue = col.text
+                    break
         except Exception:
             print(f"Failed to find player: {self.url}")
         
