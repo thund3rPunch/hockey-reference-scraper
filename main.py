@@ -45,18 +45,19 @@ def _get_stat(player, stat, year):
     return scraper.get_player_stats_for_year(f'{stat}', year)
 
 def printUsage():
-    print("USAGE: python3 main.py <year> <skaterFile> <goalieFile>")
+    print("USAGE: python3 main.py <year> <skaterFile> <goalieFile> <goalsFile> <assistsFile> <pimFile>")
     print("- year: Last hockey year of the season to get for (e.g. 2020-21 season would be 2021)")
     print("- skaterFile: List of skaters, split by endlines, to get points")
     print("- goalieFile: List of goalies, split by endlines, to get wins and shutouts")
+    print("- goalsFile: List of skaters, split by endlines, to get goals")
+    print("- assistsFile: List of skaters, split by endlines, to get assists")
+    print("- pimFile: List of skaters, split by endlines, to get PIM")
     sys.exit()
 
 if __name__ == "__main__":
     args = sys.argv[1:]
     if len(args) < 6:
         print("Invalid number of arguments!")
-        printUsage()
-    if 'help' in args[0]:
         printUsage()
 
     main(args[0], args[1], args[2], args[3], args[4], args[5])
