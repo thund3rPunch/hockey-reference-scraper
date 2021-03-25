@@ -4,45 +4,72 @@ from web_scraper import WebScraper
 from hockey_reference_url_retriever import HockeyReferenceUrlRetriever
 
 
-def main(year, skaterFilePath, goalieFilePath, goalsFilePath, assistFilePath, pimFilePath):
-    with open("output.txt", 'w') as output:
-        with open(skaterFilePath, 'r') as file:
-            for line in file:
-                player = line.strip('\n')
-                output.writelines(f"{_get_stat(player, 'points', year)}\n")
+def main(year, skater_file_path, goalie_file_path, goals_file_path, assists_file_path, pim_file_path):
+    skater_stats = []
+    skaters = _file_read(skater_file_path)
+    for skater in skaters:
+        points = _get_stat(skater, 'points', year)
+        skater_stats.append([skater, points])
 
-        output.writelines("---------------------------------\n")
+    goalie_stats = []
+    goalies = _file_read(goalie_file_path)
+    for goalie in goalies:
+        wins = _get_stat(goalie, 'wins_goalie', year)
+        shutouts = _get_stat(goalie, 'shutouts', year)
+        goalie_stats.append([goalie, wins, shutouts])
 
-        with open(goalieFilePath, 'r') as file:
-            for line in file:
-                player = line.strip('\n')
-                output.writelines(f"{_get_stat(player, 'wins_goalie', year)}\t{_get_stat(player, 'shutouts', year)}\n")
+    goal_stats = []
+    goalPlayers = _file_read(goals_file_path)
+    for skater in goalPlayers:
+        goals = _get_stat(skater, 'goals', year)
+        goal_stats.append([skater, goals])
 
-        output.writelines("---------------------------------\n")
+    assist_stats = []
+    assist_players = _file_read(assists_file_path)
+    for skater in assist_players:
+        assists = _get_stat(skater, 'assists', year)
+        assist_stats.append([skater, assists])
 
-        with open(goalsFilePath, 'r') as file:
-            for line in file:
-                player = line.strip('\n')
-                output.writelines(f"{_get_stat(player, 'goals', year)}\n")
+    pim_stats = []
+    pim_players = _file_read(pim_file_path)
+    for skater in pim_players:
+        pim = _get_stat(skater, 'pen_min', year)
+        pim_stats.append([skater, pim])
 
-        output.writelines("---------------------------------\n")
+    _output_to_file(skater_stats, goalie_stats, goal_stats, assist_stats, pim_stats)
 
-        with open(assistFilePath, 'r') as file:
-            for line in file:
-                player = line.strip('\n')
-                output.writelines(f"{_get_stat(player, 'assists', year)}\n")
-
-        output.writelines("---------------------------------\n")
-
-        with open(pimFilePath, 'r') as file:
-            for line in file:
-                player = line.strip('\n')
-                output.writelines(f"{_get_stat(player, 'pen_min', year)}\n")
+def _file_read(filePath):
+    player_list = []
+    with open(filePath, 'r') as file:
+        for line in file:
+            player_list.append(line.strip('\n'))
+    return player_list
+            
 
 def _get_stat(player, stat, year):
     url_retriever = HockeyReferenceUrlRetriever(player)
     scraper = WebScraper(url_retriever.get_url())
     return scraper.get_player_stats_for_year(f'{stat}', year)
+
+def _output_to_file(skater_stats, goalie_stats, goal_stats, assistStats, pim_stats):
+    with open("output.txt", 'w') as output:
+        _output_single_stat(output, skater_stats)
+        output.writelines("---------------------------------\n")
+        _output_double_stat(output, goalie_stats)
+        output.writelines("---------------------------------\n")
+        _output_single_stat(output, goal_stats)
+        output.writelines("---------------------------------\n")
+        _output_single_stat(output, assistStats)
+        output.writelines("---------------------------------\n")
+        _output_single_stat(output, pim_stats)
+
+def _output_single_stat(output, statistic):
+    for stat in statistic:
+        output.writelines(f"{stat[0]}\t{stat[1]}\n")
+
+def _output_double_stat(output, statistic):
+    for stat in statistic:
+        output.writelines(f"{stat[0]}\t{stat[1]}\t{stat[2]}\n")
 
 def printUsage():
     print("USAGE: python3 main.py <year> <skaterFile> <goalieFile> <goalsFile> <assistsFile> <pimFile>")
