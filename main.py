@@ -37,6 +37,7 @@ def main(year, skater_file_path, goalie_file_path, goals_file_path, assists_file
         pim_stats.append([skater, pim])
 
     _output_to_file(skater_stats, goalie_stats, goal_stats, assist_stats, pim_stats)
+    print("Finished finding all players, output to output.txt")
 
 def _file_read(filePath):
     player_list = []
