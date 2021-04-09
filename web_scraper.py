@@ -19,6 +19,6 @@ class WebScraper:
                     statValue = col.text
                     break
         except Exception:
-            print(f"Failed to find player: {self.url}")
+            print(f"Failed to find year {year} at URL: {self.url}")
         
         return statValue
